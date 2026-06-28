@@ -17,7 +17,7 @@ Além de sua utilidade prática, o projeto serve como um estudo aprofundado no d
 ## ✨ Funcionalidades Planejadas
 
 ### 🎯 MVP (Minimum Viable Product)
-- [ ] **Cadastro de Obras**: Registro completo com metadados (título, autor, editora, etc.).
+- [X] **Cadastro de Obras**: Registro completo com metadados (título, autor, editora, etc.).
 - [ ] **Busca & Filtragem**: Listagem dinâmica e busca por título da obra.
 - [ ] **Gerenciamento de Volumes**: Adicionar ou remover volumes físicos da coleção.
 - [ ] **Status de Leitura/Coleção**: Marcar obras como *completa*, *em andamento* ou *wishlist*.
@@ -140,6 +140,29 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
    }
    ./mvnw.cmd spring-boot:run
    ```
+
+### 🧪 Como Testar a API (Basic Auth)
+
+Como o Spring Security está ativo no projeto, ao iniciar a aplicação o console do Spring Boot exibirá uma senha temporária gerada automaticamente (procure por `Using generated security password:` nos logs do terminal).
+
+Para testar os endpoints através de clientes como **Postman**, **Insomnia** ou **cURL**:
+
+1. Configure a autenticação da requisição para **Basic Auth**:
+   * **Username**: `user`
+   * **Password**: (insira a senha gerada no console)
+
+2. **Exemplo de Cadastro (POST `/works`):**
+   * Envie uma requisição para `POST http://localhost:8080/works` com o corpo JSON:
+     ```json
+     {
+       "title": "Chainsaw Man",
+       "type": "MANGA",
+       "publisher": "Panini",
+       "author": "Tatsuki Fujimoto",
+       "totalVolumes": 18,
+       "status": "ONGOING"
+     }
+     ```
 
 ---
 
