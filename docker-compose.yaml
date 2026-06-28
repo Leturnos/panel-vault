@@ -1,0 +1,10 @@
+services:
+  postgres:
+    container_name: panel_vault_postgresql
+    image: postgres:17-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=panel_vault
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}

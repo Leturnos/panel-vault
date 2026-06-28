@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: panelvault
+  datasource:
+    url: jdbc:postgresql://localhost:5432/panel_vault
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+
