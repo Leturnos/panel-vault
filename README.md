@@ -67,16 +67,16 @@ src/main/java/io/github/leturnos/panelvault
 ### 1. Work (Obra)
 Representa uma obra registrada na coleção.
 
-| Campo | Tipo | Descrição |
-| :--- | :--- | :--- |
-| `id` | UUID / Long | Identificador único da obra |
-| `title` | String | Título principal da obra |
-| `type` | Enum | Tipo da obra (`MANGA`, `COMIC`, `GRAPHIC_NOVEL`) |
-| `publisher` | String | Editora responsável pela publicação |
-| `author` | String | Autor/Roteirista/Desenhista da obra |
+| Campo | Tipo    | Descrição |
+| :--- |:--------| :--- |
+| `id` | Long    | Identificador único da obra |
+| `title` | String  | Título principal da obra |
+| `type` | Enum    | Tipo da obra (`MANGA`, `COMIC`, `GRAPHIC_NOVEL`, `MANHWA`) |
+| `publisher` | String  | Editora responsável pela publicação |
+| `author` | String  | Autor/Roteirista/Desenhista da obra |
 | `totalVolumes` | Integer | Quantidade total de volumes lançados |
-| `status` | Enum | Status atual da coleção (`COMPLETING`, `ONGOING`, `WISHLIST`) |
-| `coverUrl` | String | URL para a imagem da capa |
+| `status` | Enum    | Status atual da coleção (`COMPLETED`, `ONGOING`, `WISHLIST`) |
+| `coverUrl` | String  | URL para a imagem da capa |
 
 ### 2. Volume (Volume)
 Representa uma edição/volume específico associado a uma obra.
