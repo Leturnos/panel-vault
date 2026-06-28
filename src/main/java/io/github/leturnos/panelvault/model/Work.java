@@ -1,5 +1,6 @@
 package io.github.leturnos.panelvault.model;
 
+import io.github.leturnos.panelvault.dto.WorkRequestDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,6 +30,30 @@ public class Work {
     private WorkStatus status;
 
     private String coverUrl;
+
+    public Work() {
+    }
+
+    public Work(Long id, String title, WorkType type, String publisher, String author, Integer totalVolumes, WorkStatus status, String coverUrl) {
+        this.id = id;
+        this.title = title;
+        this.type = type;
+        this.publisher = publisher;
+        this.author = author;
+        this.totalVolumes = totalVolumes;
+        this.status = status;
+        this.coverUrl = coverUrl;
+    }
+
+    public Work(WorkRequestDTO data) {
+        this.title = data.title();
+        this.type = data.type();
+        this.publisher = data.publisher();
+        this.author = data.author();
+        this.totalVolumes = data.totalVolumes();
+        this.status = data.status();
+        this.coverUrl = data.coverUrl();
+    }
 
     public Long getId() {
         return id;
