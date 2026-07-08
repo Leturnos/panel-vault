@@ -104,8 +104,8 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
 
 1. **Clonar o Repositório:**
    ```bash
-   git clone https://github.com/leturnos/panelvault.git
-   cd panelvault
+   git clone https://github.com/leturnos/panel-vault.git
+   cd panel-vault
    ```
 
 2. **Configurar as Variáveis de Ambiente:**
