@@ -2,12 +2,12 @@ package io.github.leturnos.panelvault.service;
 
 import io.github.leturnos.panelvault.dto.WorkRequestDTO;
 import io.github.leturnos.panelvault.dto.WorkResponseDTO;
+import io.github.leturnos.panelvault.exception.DuplicateResourceException;
+import io.github.leturnos.panelvault.exception.ResourceNotFoundException;
 import io.github.leturnos.panelvault.model.Work;
 import io.github.leturnos.panelvault.repository.WorkRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -22,6 +22,10 @@ public class WorkService {
 
     @Transactional
     public WorkResponseDTO create(WorkRequestDTO data) {
+        if (repository.existsByTitle(data.title())) {
+            throw new DuplicateResourceException("Já existe uma obra cadastrada com este título.");
+        }
+
         Work work = repository.save(new Work(data));
         return convertToResponseDTO(work);
     }
@@ -37,14 +41,18 @@ public class WorkService {
     @Transactional(readOnly = true)
     public WorkResponseDTO findById(Long id) {
         Work work = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Obra não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Obra não encontrada"));
         return convertToResponseDTO(work);
     }
 
     @Transactional
     public WorkResponseDTO update(Long id, WorkRequestDTO data) {
         Work work = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Obra não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Obra não encontrada"));
+
+        if (repository.existsByTitle(data.title())) {
+            throw new DuplicateResourceException("Já existe uma obra cadastrada com este título.");
+        }
 
         work.setTitle(data.title());
         work.setType(data.type());
@@ -61,7 +69,7 @@ public class WorkService {
     @Transactional
     public void delete(Long id) {
         Work work = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Obra não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Obra não encontrada"));
         repository.delete(work);
     }
 

@@ -9,5 +9,5 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
-
-
+  jackson:
+    time-zone: America/Sao_Paulo
