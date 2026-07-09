@@ -1,6 +1,8 @@
 package io.github.leturnos.panelvault.exception;
 
 import jakarta.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +25,7 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private static final DateTimeFormatter timestampFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
     // Dynamically fallback to the application's configured Jackson time-zone to format timestamps consistently.
@@ -40,6 +43,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // Fallback for unhandled server errors, ensuring internal stack traces do not leak to the client.
     @ExceptionHandler(Exception.class)
     protected final ResponseEntity<Object> handleGlobalException(Exception ex, WebRequest request) {
+        logger.error("Internal server error: {}", ex.getMessage(), ex);
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Ocorreu um erro inesperado no servidor."
@@ -64,6 +69,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .map(error -> new FieldErrorRecord(error.getField(), error.getDefaultMessage()))
                 .toList();
 
+        logger.warn("Validation error on fields: {}", fieldErrors);
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 status,
                 "Os parâmetros da requisição não foram validados."
@@ -77,6 +84,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     protected final ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+        logger.warn("Resource not found: {}", ex.getMessage());
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.NOT_FOUND,
                 ex.getMessage()
@@ -87,9 +96,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
     }
 
-    // Catch database constraints (e.g. unique, foreign keys)
+    // Catch database constraints (e.g. unique, foreign keys) and translate them into API conflict status (409).
     @ExceptionHandler(DataIntegrityViolationException.class)
     protected final ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
+        logger.warn("Data integrity violation: {}", ex.getMessage());
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.CONFLICT,
                 "Erro de restrição de integridade de dados."
@@ -102,6 +113,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DuplicateResourceException.class)
     protected final ResponseEntity<Object> handleDuplicateResourceException(DuplicateResourceException ex, WebRequest request) {
+        logger.warn("Resource conflict: {}", ex.getMessage());
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.CONFLICT,
                 ex.getMessage()
