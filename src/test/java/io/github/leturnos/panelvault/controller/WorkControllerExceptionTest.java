@@ -108,4 +108,38 @@ class WorkControllerExceptionTest {
                 .andExpect(jsonPath("$.status", is(409)))
                 .andExpect(jsonPath("$.detail", is("Já existe uma obra cadastrada com este título.")));
     }
+
+    @Test
+    void whenFindAll_shouldReturn200AndPagedWorks() throws Exception {
+        io.github.leturnos.panelvault.dto.WorkResponseDTO work = new io.github.leturnos.panelvault.dto.WorkResponseDTO(
+                1L, "Naruto", io.github.leturnos.panelvault.model.WorkType.MANGA, "Panini", "Kishimoto", 72, io.github.leturnos.panelvault.model.WorkStatus.COMPLETED, "http://cover.jpg"
+        );
+        org.springframework.data.domain.Page<io.github.leturnos.panelvault.dto.WorkResponseDTO> pagedWorks = new org.springframework.data.domain.PageImpl<>(java.util.List.of(work));
+
+        Mockito.when(service.findAll(Mockito.isNull(), Mockito.any(org.springframework.data.domain.Pageable.class)))
+                .thenReturn(pagedWorks);
+
+        mockMvc.perform(get("/works"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].title", is("Naruto")))
+                .andExpect(jsonPath("$.content[0].publisher", is("Panini")));
+    }
+
+    @Test
+    void whenFindAllWithTitleFilter_shouldReturn200AndPagedFilteredWorks() throws Exception {
+        io.github.leturnos.panelvault.dto.WorkResponseDTO work = new io.github.leturnos.panelvault.dto.WorkResponseDTO(
+                1L, "Naruto", io.github.leturnos.panelvault.model.WorkType.MANGA, "Panini", "Kishimoto", 72, io.github.leturnos.panelvault.model.WorkStatus.COMPLETED, "http://cover.jpg"
+        );
+        org.springframework.data.domain.Page<io.github.leturnos.panelvault.dto.WorkResponseDTO> pagedWorks = new org.springframework.data.domain.PageImpl<>(java.util.List.of(work));
+
+        Mockito.when(service.findAll(Mockito.eq("Naruto"), Mockito.any(org.springframework.data.domain.Pageable.class)))
+                .thenReturn(pagedWorks);
+
+        mockMvc.perform(get("/works").param("title", "Naruto"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].title", is("Naruto")));
+    }
 }
+

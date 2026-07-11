@@ -8,10 +8,10 @@ import io.github.leturnos.panelvault.model.Work;
 import io.github.leturnos.panelvault.repository.WorkRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class WorkService {
@@ -37,12 +37,15 @@ public class WorkService {
     }
 
     @Transactional(readOnly = true)
-    public List<WorkResponseDTO> findAll() {
-        logger.info("Fetching all works.");
-        return repository.findAll()
-                .stream()
-                .map(this::convertToResponseDTO)
-                .toList();
+    public Page<WorkResponseDTO> findAll(String title, Pageable pageable) {
+        logger.info("Fetching works. Title filter: {}, Pageable: {}", title, pageable);
+        Page<Work> worksPage;
+        if (title == null || title.isBlank()) {
+            worksPage = repository.findAll(pageable);
+        } else {
+            worksPage = repository.findByTitleContainingIgnoreCase(title, pageable);
+        }
+        return worksPage.map(this::convertToResponseDTO);
     }
 
     @Transactional(readOnly = true)

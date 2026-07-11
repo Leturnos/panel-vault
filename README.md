@@ -18,7 +18,7 @@ Além de sua utilidade prática, o projeto serve como um estudo aprofundado no d
 
 ### 🎯 MVP (Minimum Viable Product)
 - [X] **Cadastro de Obras**: Registro completo com metadados (título, autor, editora, etc.).
-- [ ] **Busca & Filtragem**: Listagem dinâmica e busca por título da obra.
+- [X] **Busca & Filtragem**: Listagem dinâmica e busca por título da obra.
 - [X] **Gerenciamento de Volumes**: Adicionar ou remover volumes físicos da coleção.
 - [X] **Status de Leitura/Coleção**: Marcar obras como *completa*, *em andamento* ou *wishlist*.
 - [X] **Persistência de Dados**: Integração com banco de dados relacional PostgreSQL.
@@ -147,7 +147,7 @@ A tabela abaixo lista todos os endpoints disponíveis na aplicação:
 
 | Recurso | Método | Endpoint | Descrição |
 | :--- | :--- | :--- | :--- |
-| **Obras** | `GET` | `/works` | Lista todas as obras cadastradas |
+| **Obras** | `GET` | `/works` | Lista todas as obras de forma paginada (filtros opcionais: `title`, paginação: `page`, `size`, `sort`) |
 | | `GET` | `/works/{id}` | Busca os detalhes de uma obra específica |
 | | `POST` | `/works` | Cadastra uma nova obra |
 | | `PUT` | `/works/{id}` | Atualiza as informações de uma obra existente |

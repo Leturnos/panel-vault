@@ -4,12 +4,13 @@ import io.github.leturnos.panelvault.dto.WorkRequestDTO;
 import io.github.leturnos.panelvault.dto.WorkResponseDTO;
 import io.github.leturnos.panelvault.service.WorkService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/works")
@@ -22,8 +23,10 @@ public class WorkController {
     }
 
     @GetMapping
-    public ResponseEntity<List<WorkResponseDTO>> findAll() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<Page<WorkResponseDTO>> findAll(
+            @RequestParam(required = false) String title,
+            Pageable pageable) {
+        return ResponseEntity.ok(service.findAll(title, pageable));
     }
 
     @GetMapping("/{id}")
