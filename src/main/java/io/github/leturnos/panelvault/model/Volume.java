@@ -1,5 +1,6 @@
 package io.github.leturnos.panelvault.model;
 
+import io.github.leturnos.panelvault.dto.VolumeRequestDTO;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -13,13 +14,17 @@ public class Volume {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Integer number;
+    
     private LocalDate purchaseDate;
     private BigDecimal purchasePrice;
+    
+    @Column(nullable = false)
     private Boolean owned;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "work_id")
+    @JoinColumn(name = "work_id", nullable = false)
     private Work work;
 
     public Volume() {
@@ -32,6 +37,13 @@ public class Volume {
         this.purchasePrice = purchasePrice;
         this.owned = owned;
         this.work = work;
+    }
+
+    public Volume(VolumeRequestDTO data) {
+        this.number = data.number();
+        this.purchaseDate = data.purchaseDate();
+        this.purchasePrice = data.purchasePrice();
+        this.owned = data.owned();
     }
 
     public Long getId() {

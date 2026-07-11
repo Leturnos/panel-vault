@@ -1,0 +1,51 @@
+package io.github.leturnos.panelvault.controller;
+
+import io.github.leturnos.panelvault.dto.VolumeRequestDTO;
+import io.github.leturnos.panelvault.dto.VolumeResponseDTO;
+import io.github.leturnos.panelvault.service.VolumeService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
+
+@RestController
+public class VolumeController {
+
+    private final VolumeService service;
+
+    public VolumeController(VolumeService service) {
+        this.service = service;
+    }
+
+    @PostMapping("/works/{id}/volumes")
+    public ResponseEntity<VolumeResponseDTO> create(@PathVariable Long id, @Valid @RequestBody VolumeRequestDTO data) {
+        VolumeResponseDTO result = service.create(id, data);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(result.id())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(result);
+    }
+
+    @GetMapping("/works/{workId}/volumes")
+    public ResponseEntity<List<VolumeResponseDTO>>
+    findAllByWorkId(@PathVariable Long workId) {
+        return ResponseEntity.ok(service.findAllByWorkId(workId));
+    }
+
+    @GetMapping("/volumes/{id}")
+    public ResponseEntity<VolumeResponseDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.findById(id));
+    }
+
+    @DeleteMapping("/volumes/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}

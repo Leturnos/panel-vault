@@ -19,9 +19,9 @@ Além de sua utilidade prática, o projeto serve como um estudo aprofundado no d
 ### 🎯 MVP (Minimum Viable Product)
 - [X] **Cadastro de Obras**: Registro completo com metadados (título, autor, editora, etc.).
 - [ ] **Busca & Filtragem**: Listagem dinâmica e busca por título da obra.
-- [ ] **Gerenciamento de Volumes**: Adicionar ou remover volumes físicos da coleção.
-- [ ] **Status de Leitura/Coleção**: Marcar obras como *completa*, *em andamento* ou *wishlist*.
-- [ ] **Persistência de Dados**: Integração com banco de dados relacional PostgreSQL.
+- [X] **Gerenciamento de Volumes**: Adicionar ou remover volumes físicos da coleção.
+- [X] **Status de Leitura/Coleção**: Marcar obras como *completa*, *em andamento* ou *wishlist*.
+- [X] **Persistência de Dados**: Integração com banco de dados relacional PostgreSQL.
 
 ### 🚀 Funcionalidades Futuras
 - [ ] **Controle Financeiro**: Acompanhamento de gastos individuais por obra e volumes.
@@ -141,6 +141,22 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
    ./mvnw.cmd spring-boot:run
    ```
 
+### 🔗 Endpoints da API
+
+A tabela abaixo lista todos os endpoints disponíveis na aplicação:
+
+| Recurso | Método | Endpoint | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Obras** | `GET` | `/works` | Lista todas as obras cadastradas |
+| | `GET` | `/works/{id}` | Busca os detalhes de uma obra específica |
+| | `POST` | `/works` | Cadastra uma nova obra |
+| | `PUT` | `/works/{id}` | Atualiza as informações de uma obra existente |
+| | `DELETE` | `/works/{id}` | Exclui uma obra cadastrada |
+| **Volumes**| `POST` | `/works/{workId}/volumes` | Cadastra um volume associado a uma obra |
+| | `GET` | `/works/{workId}/volumes` | Lista todos os volumes de uma obra específica |
+| | `GET` | `/volumes/{id}` | Busca os detalhes de um volume individual |
+| | `DELETE` | `/volumes/{id}` | Exclui um volume cadastrado |
+
 ### 🧪 Como Testar a API (Basic Auth)
 
 Como o Spring Security está ativo no projeto, ao iniciar a aplicação o console do Spring Boot exibirá uma senha temporária gerada automaticamente (procure por `Using generated security password:` nos logs do terminal).
@@ -151,7 +167,7 @@ Para testar os endpoints através de clientes como **Postman**, **Insomnia** ou 
    * **Username**: `user`
    * **Password**: (insira a senha gerada no console)
 
-2. **Exemplo de Cadastro (POST `/works`):**
+2. **Exemplo de Cadastro de Obra (POST `/works`):**
    * Envie uma requisição para `POST http://localhost:8080/works` com o corpo JSON:
      ```json
      {
@@ -164,6 +180,19 @@ Para testar os endpoints através de clientes como **Postman**, **Insomnia** ou 
      }
      ```
 
+3. **Exemplo de Cadastro de Volume (POST `/works/{workId}/volumes`):**
+   * Envie uma requisição para `POST http://localhost:8080/works/1/volumes` (substitua `1` pelo ID de uma obra existente) com o corpo JSON:
+     ```json
+     {
+       "number": 1,
+       "purchaseDate": "2026-07-10",
+       "purchasePrice": 29.90,
+       "owned": true
+     }
+     ```
+     
+>Para outras requisições consulte a tabela de endpoints acima
+> 
 ---
 
 ## 🎯 Objetivos de Aprendizado
