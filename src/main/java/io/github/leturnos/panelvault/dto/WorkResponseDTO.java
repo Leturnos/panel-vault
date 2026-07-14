@@ -1,6 +1,5 @@
 package io.github.leturnos.panelvault.dto;
 
-import io.github.leturnos.panelvault.model.WorkStatus;
 import io.github.leturnos.panelvault.model.WorkType;
 
 public record WorkResponseDTO(
@@ -10,6 +9,5 @@ public record WorkResponseDTO(
         String publisher,
         String author,
         Integer totalVolumes,
-        WorkStatus status,
         String coverUrl) {
 }

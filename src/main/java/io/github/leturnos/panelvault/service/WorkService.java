@@ -78,7 +78,6 @@ public class WorkService {
         work.setPublisher(data.publisher());
         work.setAuthor(data.author());
         work.setTotalVolumes(data.totalVolumes());
-        work.setStatus(data.status());
         work.setCoverUrl(data.coverUrl());
 
         repository.save(work);
@@ -106,7 +105,6 @@ public class WorkService {
                 work.getPublisher(),
                 work.getAuthor(),
                 work.getTotalVolumes(),
-                work.getStatus(),
                 work.getCoverUrl()
         );
     }

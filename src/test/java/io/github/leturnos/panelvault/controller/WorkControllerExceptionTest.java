@@ -3,8 +3,6 @@ package io.github.leturnos.panelvault.controller;
 import io.github.leturnos.panelvault.dto.WorkRequestDTO;
 import io.github.leturnos.panelvault.exception.DuplicateResourceException;
 import io.github.leturnos.panelvault.exception.ResourceNotFoundException;
-import io.github.leturnos.panelvault.model.WorkStatus;
-import io.github.leturnos.panelvault.model.WorkType;
 import io.github.leturnos.panelvault.service.WorkService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -112,7 +110,7 @@ class WorkControllerExceptionTest {
     @Test
     void whenFindAll_shouldReturn200AndPagedWorks() throws Exception {
         io.github.leturnos.panelvault.dto.WorkResponseDTO work = new io.github.leturnos.panelvault.dto.WorkResponseDTO(
-                1L, "Naruto", io.github.leturnos.panelvault.model.WorkType.MANGA, "Panini", "Kishimoto", 72, io.github.leturnos.panelvault.model.WorkStatus.COMPLETED, "http://cover.jpg"
+                1L, "Naruto", io.github.leturnos.panelvault.model.WorkType.MANGA, "Panini", "Kishimoto", 72, "http://cover.jpg"
         );
         org.springframework.data.domain.Page<io.github.leturnos.panelvault.dto.WorkResponseDTO> pagedWorks = new org.springframework.data.domain.PageImpl<>(java.util.List.of(work));
 
@@ -129,7 +127,7 @@ class WorkControllerExceptionTest {
     @Test
     void whenFindAllWithTitleFilter_shouldReturn200AndPagedFilteredWorks() throws Exception {
         io.github.leturnos.panelvault.dto.WorkResponseDTO work = new io.github.leturnos.panelvault.dto.WorkResponseDTO(
-                1L, "Naruto", io.github.leturnos.panelvault.model.WorkType.MANGA, "Panini", "Kishimoto", 72, io.github.leturnos.panelvault.model.WorkStatus.COMPLETED, "http://cover.jpg"
+                1L, "Naruto", io.github.leturnos.panelvault.model.WorkType.MANGA, "Panini", "Kishimoto", 72, "http://cover.jpg"
         );
         org.springframework.data.domain.Page<io.github.leturnos.panelvault.dto.WorkResponseDTO> pagedWorks = new org.springframework.data.domain.PageImpl<>(java.util.List.of(work));
 

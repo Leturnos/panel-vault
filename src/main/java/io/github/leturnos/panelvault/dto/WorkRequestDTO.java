@@ -1,6 +1,5 @@
 package io.github.leturnos.panelvault.dto;
 
-import io.github.leturnos.panelvault.model.WorkStatus;
 import io.github.leturnos.panelvault.model.WorkType;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.URL;
@@ -21,9 +20,6 @@ public record WorkRequestDTO(
 
         @Positive(message = "A quantidade de volumes deve ser positiva")
         Integer totalVolumes,
-
-        @NotNull(message = "O status da obra é obrigatório")
-        WorkStatus status,
 
         @URL(message = "A URL da capa deve ser válida")
         @Size(max = 500, message = "A URL da capa não pode ter mais que 500 caracteres")

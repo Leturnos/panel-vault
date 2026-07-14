@@ -27,24 +27,19 @@ public class Work {
 
     private Integer totalVolumes;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private WorkStatus status;
-
     @Column(length = 500)
     private String coverUrl;
 
     public Work() {
     }
 
-    public Work(Long id, String title, WorkType type, String publisher, String author, Integer totalVolumes, WorkStatus status, String coverUrl) {
+    public Work(Long id, String title, WorkType type, String publisher, String author, Integer totalVolumes, String coverUrl) {
         this.id = id;
         this.title = title;
         this.type = type;
         this.publisher = publisher;
         this.author = author;
         this.totalVolumes = totalVolumes;
-        this.status = status;
         this.coverUrl = coverUrl;
     }
 
@@ -54,7 +49,6 @@ public class Work {
         this.publisher = data.publisher();
         this.author = data.author();
         this.totalVolumes = data.totalVolumes();
-        this.status = data.status();
         this.coverUrl = data.coverUrl();
     }
 
@@ -106,14 +100,6 @@ public class Work {
         this.totalVolumes = totalVolumes;
     }
 
-    public WorkStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(WorkStatus status) {
-        this.status = status;
-    }
-
     public String getCoverUrl() {
         return coverUrl;
     }
@@ -125,11 +111,11 @@ public class Work {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Work work)) return false;
-        return Objects.equals(id, work.id) && Objects.equals(title, work.title) && Objects.equals(type, work.type) && Objects.equals(publisher, work.publisher) && Objects.equals(author, work.author) && Objects.equals(totalVolumes, work.totalVolumes) && Objects.equals(status, work.status) && Objects.equals(coverUrl, work.coverUrl);
+        return Objects.equals(id, work.id) && Objects.equals(title, work.title) && Objects.equals(type, work.type) && Objects.equals(publisher, work.publisher) && Objects.equals(author, work.author) && Objects.equals(totalVolumes, work.totalVolumes) && Objects.equals(coverUrl, work.coverUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, type, publisher, author, totalVolumes, status, coverUrl);
+        return Objects.hash(id, title, type, publisher, author, totalVolumes, coverUrl);
     }
 }
