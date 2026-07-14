@@ -10,4 +10,6 @@ import java.util.List;
 public interface VolumeRepository extends JpaRepository<Volume, Long> {
 
     List<Volume> findByWorkId(Long workId);
+
+    long countByOwnedTrue();
 }

@@ -156,6 +156,7 @@ A tabela abaixo lista todos os endpoints disponíveis na aplicação:
 | | `GET` | `/works/{workId}/volumes` | Lista todos os volumes de uma obra específica |
 | | `GET` | `/volumes/{id}` | Busca os detalhes de um volume individual |
 | | `DELETE` | `/volumes/{id}` | Exclui um volume cadastrado |
+| **Estatísticas**| `GET` | `/stats` | Retorna as estatísticas gerais do catálogo de obras e volumes. **[Público - Sem autenticação]** |
 
 ### 🧪 Como Testar a API (Basic Auth)
 
