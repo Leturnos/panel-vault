@@ -1,5 +1,6 @@
 package io.github.leturnos.panelvault.model;
 
+import io.github.leturnos.panelvault.dto.UserRequestDTO;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -28,6 +29,12 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public User(UserRequestDTO data) {
+        this.username = data.username();
+        this.email = data.email();
+        this.password = data.password();
     }
 
     public Long getId() {

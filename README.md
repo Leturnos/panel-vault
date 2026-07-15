@@ -157,6 +157,7 @@ A tabela abaixo lista todos os endpoints disponíveis na aplicação:
 | | `GET` | `/volumes/{id}` | Busca os detalhes de um volume individual |
 | | `DELETE` | `/volumes/{id}` | Exclui um volume cadastrado |
 | **Estatísticas**| `GET` | `/stats` | Retorna as estatísticas gerais do catálogo de obras e volumes. **[Público - Sem autenticação]** |
+| **Autenticação**| `POST` | `/auth/register` | Cadastra um novo usuário no sistema. **[Público - Sem autenticação]** |
 
 ### 🧪 Como Testar a API (Basic Auth)
 
@@ -189,6 +190,16 @@ Para testar os endpoints através de clientes como **Postman**, **Insomnia** ou 
        "purchaseDate": "2026-07-10",
        "purchasePrice": 29.90,
        "owned": true
+     }
+     ```
+     
+4. **Exemplo de Cadastro de Usuário (POST `/auth/register`):**
+   * Envie uma requisição para `POST http://localhost:8080/auth/register` (sem necessidade de Basic Auth) com o corpo JSON:
+     ```json
+     {
+       "username": "leandro",
+       "email": "leandro@example.com",
+       "password": "senhaSegura123"
      }
      ```
      
