@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record UserRequestDTO(
+public record RegisterRequestDTO(
         @NotBlank(message = "Username é obrigatório")
         @Size(max = 50, message = "O username não pode ter mais que 50 caracteres")
         String username,

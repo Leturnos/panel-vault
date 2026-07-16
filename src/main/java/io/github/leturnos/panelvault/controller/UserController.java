@@ -1,6 +1,8 @@
 package io.github.leturnos.panelvault.controller;
 
-import io.github.leturnos.panelvault.dto.UserRequestDTO;
+import io.github.leturnos.panelvault.dto.LoginRequestDTO;
+import io.github.leturnos.panelvault.dto.LoginResponseDTO;
+import io.github.leturnos.panelvault.dto.RegisterRequestDTO;
 import io.github.leturnos.panelvault.dto.UserResponseDTO;
 import io.github.leturnos.panelvault.service.UserService;
 import jakarta.validation.Valid;
@@ -24,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRequestDTO data) {
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody RegisterRequestDTO data) {
         UserResponseDTO result = service.register(data);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -33,5 +35,10 @@ public class UserController {
                 .toUri();
 
         return ResponseEntity.created(uri).body(result);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO data) {
+        return ResponseEntity.ok(service.login(data));
     }
 }

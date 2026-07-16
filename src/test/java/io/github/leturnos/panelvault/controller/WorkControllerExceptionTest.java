@@ -29,6 +29,15 @@ class WorkControllerExceptionTest {
     @MockitoBean
     private WorkService service;
 
+    @MockitoBean
+    private io.github.leturnos.panelvault.config.TokenService tokenService;
+
+    @MockitoBean
+    private io.github.leturnos.panelvault.repository.UserRepository userRepository;
+
+    @MockitoBean
+    private org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
+
     @Test
     void whenFindByIdNotFound_shouldReturn404AndProblemDetail() throws Exception {
         Mockito.when(service.findById(1L))

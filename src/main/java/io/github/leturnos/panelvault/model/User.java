@@ -1,11 +1,12 @@
 package io.github.leturnos.panelvault.model;
 
-import io.github.leturnos.panelvault.dto.UserRequestDTO;
+import io.github.leturnos.panelvault.dto.RegisterRequestDTO;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -31,7 +32,7 @@ public class User {
         this.password = password;
     }
 
-    public User(UserRequestDTO data) {
+    public User(RegisterRequestDTO data) {
         this.username = data.username();
         this.email = data.email();
         this.password = data.password();

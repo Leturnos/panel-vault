@@ -26,7 +26,7 @@ Além de sua utilidade prática, o projeto serve como um estudo aprofundado no d
 ### 🚀 Funcionalidades Futuras
 - [ ] **Controle Financeiro**: Acompanhamento de gastos individuais por obra e volumes.
 - [ ] **Painel de Estatísticas**: Dashboard interativo com dados da coleção (total gasto, volumes lidos, etc.).
-- [ ] **Autenticação Segura**: Controle de acesso por usuário via Spring Security (JWT).
+- [X] **Autenticação Segura**: Controle de acesso por usuário via Spring Security (JWT).
 - [ ] **Armazenamento de Mídia**: Upload de capas personalizadas integrando com serviços na nuvem.
 - [ ] **Integração com APIs Externas**: Busca automática de informações de obras e volumes.
 - [ ] **Notificações**: Alertas sobre lançamentos ou novos volumes disponíveis.
@@ -158,48 +158,62 @@ A tabela abaixo lista todos os endpoints disponíveis na aplicação:
 | | `DELETE` | `/volumes/{id}` | Exclui um volume cadastrado |
 | **Estatísticas**| `GET` | `/stats` | Retorna as estatísticas gerais do catálogo de obras e volumes. **[Público - Sem autenticação]** |
 | **Autenticação**| `POST` | `/auth/register` | Cadastra um novo usuário no sistema. **[Público - Sem autenticação]** |
+| | `POST` | `/auth/login` | Realiza a autenticação do usuário e retorna o token JWT. **[Público - Sem autenticação]** |
 
-### 🧪 Como Testar a API (Basic Auth)
+### 🧪 Como Testar a API (Autenticação JWT)
 
-Como o Spring Security está ativo no projeto, ao iniciar a aplicação o console do Spring Boot exibirá uma senha temporária gerada automaticamente (procure por `Using generated security password:` nos logs do terminal).
+A API utiliza autenticação baseada em JSON Web Tokens (JWT). Para testar os endpoints através de ferramentas como **Postman**, **Insomnia** ou **cURL**:
 
-Para testar os endpoints através de clientes como **Postman**, **Insomnia** ou **cURL**:
+1. **Cadastrar um Usuário:**
+   * Envie uma requisição pública para `POST http://localhost:8080/auth/register` com o corpo JSON:
+     ```json
+     {
+       "username": "leandro",
+       "email": "leandro@example.com",
+       "password": "senhaSegura123"
+     }
+     ```
 
-1. Configure a autenticação da requisição para **Basic Auth**:
-   * **Username**: `user`
-   * **Password**: (insira a senha gerada no console)
+2. **Realizar o Login:**
+   * Envie uma requisição pública para `POST http://localhost:8080/auth/login` com o corpo JSON:
+     ```json
+     {
+       "username": "leandro",
+       "password": "senhaSegura123"
+     }
+     ```
+   * A API retornará um token JWT no formato:
+     ```json
+     {
+       "token": "seu-token-jwt-gerado-aqui"
+     }
+     ```
 
-2. **Exemplo de Cadastro de Obra (POST `/works`):**
-   * Envie uma requisição para `POST http://localhost:8080/works` com o corpo JSON:
+3. **Acessar Endpoints Protegidos:**
+   * Para requisições em endpoints protegidos (como listar/cadastrar obras e volumes), adicione o cabeçalho HTTP de Autorização:
+     * **Key:** `Authorization`
+     * **Value:** `Bearer <seu-token-jwt-gerado-aqui>`
+
+4. **Exemplo de Cadastro de Obra (POST `/works`):**
+   * Envie uma requisição (contendo o cabeçalho de autorização) para `POST http://localhost:8080/works` com o corpo JSON:
      ```json
      {
        "title": "Chainsaw Man",
        "type": "MANGA",
        "publisher": "Panini",
        "author": "Tatsuki Fujimoto",
-       "totalVolumes": 18,
-       "status": "ONGOING"
+       "totalVolumes": 18
      }
      ```
 
-3. **Exemplo de Cadastro de Volume (POST `/works/{workId}/volumes`):**
-   * Envie uma requisição para `POST http://localhost:8080/works/1/volumes` (substitua `1` pelo ID de uma obra existente) com o corpo JSON:
+5. **Exemplo de Cadastro de Volume (POST `/works/{workId}/volumes`):**
+   * Envie uma requisição (contendo o cabeçalho de autorização) para `POST http://localhost:8080/works/1/volumes` (substitua `1` pelo ID de uma obra existente) com o corpo JSON:
      ```json
      {
        "number": 1,
        "purchaseDate": "2026-07-10",
        "purchasePrice": 29.90,
        "owned": true
-     }
-     ```
-     
-4. **Exemplo de Cadastro de Usuário (POST `/auth/register`):**
-   * Envie uma requisição para `POST http://localhost:8080/auth/register` (sem necessidade de Basic Auth) com o corpo JSON:
-     ```json
-     {
-       "username": "leandro",
-       "email": "leandro@example.com",
-       "password": "senhaSegura123"
      }
      ```
      
