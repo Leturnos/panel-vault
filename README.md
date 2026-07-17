@@ -62,10 +62,10 @@ src/main/java/io/github/leturnos/panelvault
 
 ---
 
-## 🗃️ Modelo de Dados Inicial
+## 🗃️ Modelo de Dados
 
 ### 1. Work (Obra)
-Representa uma obra registrada na coleção.
+Representa uma obra no catálogo global do sistema.
 
 | Campo | Tipo    | Descrição |
 | :--- |:--------| :--- |
@@ -75,7 +75,6 @@ Representa uma obra registrada na coleção.
 | `publisher` | String  | Editora responsável pela publicação |
 | `author` | String  | Autor/Roteirista/Desenhista da obra |
 | `totalVolumes` | Integer | Quantidade total de volumes lançados |
-| `status` | Enum    | Status atual da coleção (`COMPLETED`, `ONGOING`, `WISHLIST`) |
 | `coverUrl` | String  | URL para a imagem da capa |
 
 ### 2. Volume (Volume)
@@ -83,12 +82,34 @@ Representa uma edição/volume específico associado a uma obra.
 
 | Campo | Tipo | Descrição |
 | :--- | :--- | :--- |
-| `id` | UUID / Long | Identificador único do volume |
+| `id` | Long | Identificador único do volume |
 | `number` | Integer | Número da edição/volume |
 | `purchaseDate` | LocalDate | Data da compra do volume |
 | `purchasePrice` | BigDecimal | Valor pago pelo volume |
 | `owned` | Boolean | Sinaliza se o volume já foi adquirido |
 | `workId` | Long | Chave estrangeira ligando à obra |
+| `userId` | Long | Chave estrangeira ligando ao usuário dono do volume |
+
+### 3. User (Usuário)
+Representa um usuário cadastrado na aplicação.
+
+| Campo | Tipo | Descrição |
+| :--- | :--- | :--- |
+| `id` | Long | Identificador único do usuário |
+| `username` | String | Nome de usuário único para login |
+| `email` | String | E-mail de cadastro único |
+| `password` | String | Senha criptografada (BCrypt) |
+
+### 4. UserWork (Coleção do Usuário)
+Mapeia o relacionamento de coleção e progresso de um usuário com uma obra do catálogo.
+
+| Campo | Tipo | Descrição |
+| :--- | :--- | :--- |
+| `id` | Long | Identificador único do registro de coleção |
+| `userId` | Long | Chave estrangeira ligando ao usuário |
+| `workId` | Long | Chave estrangeira ligando à obra |
+| `status` | Enum | Status de coleção (`COMPLETED`, `ONGOING`, `WISHLIST`) |
+| `rating` | BigDecimal | Avaliação pessoal do usuário sobre a obra (0.0 a 10.0, passo 0.5) |
 
 ---
 
@@ -152,11 +173,15 @@ A tabela abaixo lista todos os endpoints disponíveis na aplicação:
 | | `POST` | `/works` | Cadastra uma nova obra |
 | | `PUT` | `/works/{id}` | Atualiza as informações de uma obra existente |
 | | `DELETE` | `/works/{id}` | Exclui uma obra cadastrada |
-| **Volumes**| `POST` | `/works/{workId}/volumes` | Cadastra um volume associado a uma obra |
-| | `GET` | `/works/{workId}/volumes` | Lista todos os volumes de uma obra específica |
-| | `GET` | `/volumes/{id}` | Busca os detalhes de um volume individual |
-| | `DELETE` | `/volumes/{id}` | Exclui um volume cadastrado |
+| **Coleção** | `PUT` | `/works/{workId}/collection` | Salva ou atualiza a obra na coleção pessoal (com status e nota opcional) |
+| | `GET` | `/works/{workId}/collection` | Busca os detalhes de coleção da obra do usuário autenticado |
+| | `DELETE` | `/works/{workId}/collection` | Remove a obra da coleção pessoal do usuário autenticado |
+| **Volumes**| `POST` | `/works/{workId}/volumes` | Cadastra um volume associado a uma obra na coleção pessoal |
+| | `GET` | `/works/{workId}/volumes` | Lista todos os volumes de uma obra específica da coleção pessoal |
+| | `GET` | `/volumes/{id}` | Busca os detalhes de um volume individual da coleção pessoal |
+| | `DELETE` | `/volumes/{id}` | Exclui um volume cadastrado da coleção pessoal |
 | **Estatísticas**| `GET` | `/stats` | Retorna as estatísticas gerais do catálogo de obras e volumes. **[Público - Sem autenticação]** |
+| | `GET` | `/stats/me` | Retorna as estatísticas de coleção pessoais do usuário autenticado |
 | **Autenticação**| `POST` | `/auth/register` | Cadastra um novo usuário no sistema. **[Público - Sem autenticação]** |
 | | `POST` | `/auth/login` | Realiza a autenticação do usuário e retorna o token JWT. **[Público - Sem autenticação]** |
 

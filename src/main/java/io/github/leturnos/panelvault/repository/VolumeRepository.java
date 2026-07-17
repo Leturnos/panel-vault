@@ -9,7 +9,9 @@ import java.util.List;
 @Repository
 public interface VolumeRepository extends JpaRepository<Volume, Long> {
 
-    List<Volume> findByWorkId(Long workId);
-
     long countByOwnedTrue();
+
+    List<Volume> findByWorkIdAndUserId(Long workId, Long userId);
+
+    long countByUserIdAndOwnedTrue(Long userId);
 }
