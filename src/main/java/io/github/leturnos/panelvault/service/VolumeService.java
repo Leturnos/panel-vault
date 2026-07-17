@@ -99,7 +99,7 @@ public class VolumeService {
                 volume.getPurchaseDate(),
                 volume.getPurchasePrice(),
                 volume.getOwned(),
-                volume.getWork()
+                volume.getWork().getId()
         );
     }
 }
