@@ -1,18 +1,29 @@
 package io.github.leturnos.panelvault.controller;
 
+import io.github.leturnos.panelvault.config.TokenService;
 import io.github.leturnos.panelvault.dto.WorkRequestDTO;
+import io.github.leturnos.panelvault.dto.WorkResponseDTO;
 import io.github.leturnos.panelvault.exception.DuplicateResourceException;
 import io.github.leturnos.panelvault.exception.ResourceNotFoundException;
+import io.github.leturnos.panelvault.model.WorkType;
+import io.github.leturnos.panelvault.repository.UserRepository;
 import io.github.leturnos.panelvault.service.WorkService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -21,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(WorkController.class)
 @WithMockUser
-class WorkControllerExceptionTest {
+class WorkControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -30,15 +41,16 @@ class WorkControllerExceptionTest {
     private WorkService service;
 
     @MockitoBean
-    private io.github.leturnos.panelvault.config.TokenService tokenService;
+    private TokenService tokenService;
 
     @MockitoBean
-    private io.github.leturnos.panelvault.repository.UserRepository userRepository;
+    private UserRepository userRepository;
 
     @MockitoBean
-    private org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Test
+    @DisplayName("Should return 404 ProblemDetail when work is not found by ID")
     void whenFindByIdNotFound_shouldReturn404AndProblemDetail() throws Exception {
         Mockito.when(service.findById(1L))
                 .thenThrow(new ResourceNotFoundException("Obra não encontrada"));
@@ -52,8 +64,8 @@ class WorkControllerExceptionTest {
     }
 
     @Test
+    @DisplayName("Should return 400 with structured validation errors when request body is invalid")
     void whenCreateInvalidWork_shouldReturn400AndStructuredValidationErrors() throws Exception {
-        // Envia um JSON vazio para disparar erros de validação
         mockMvc.perform(post("/works")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -67,6 +79,7 @@ class WorkControllerExceptionTest {
     }
 
     @Test
+    @DisplayName("Should return 409 ProblemDetail when data integrity constraint is violated")
     void whenDataIntegrityViolated_shouldReturn409AndProblemDetail() throws Exception {
         Mockito.when(service.create(Mockito.any(WorkRequestDTO.class)))
                 .thenThrow(new DataIntegrityViolationException("Erro de constraint no banco"));
@@ -81,7 +94,6 @@ class WorkControllerExceptionTest {
                                   "publisher": "Publisher",
                                   "author": "Author",
                                   "totalVolumes": 10,
-                                  "status": "ONGOING",
                                   "coverUrl": "http://cover.jpg"
                                 }
                                 """))
@@ -92,6 +104,7 @@ class WorkControllerExceptionTest {
     }
 
     @Test
+    @DisplayName("Should return 409 ProblemDetail with custom message on DuplicateResourceException")
     void whenDuplicateResource_shouldReturn409AndProblemDetailWithCustomMessage() throws Exception {
         Mockito.when(service.create(Mockito.any(WorkRequestDTO.class)))
                 .thenThrow(new DuplicateResourceException("Já existe uma obra cadastrada com este título."));
@@ -106,7 +119,6 @@ class WorkControllerExceptionTest {
                                   "publisher": "Publisher",
                                   "author": "Author",
                                   "totalVolumes": 10,
-                                  "status": "ONGOING",
                                   "coverUrl": "http://cover.jpg"
                                 }
                                 """))
@@ -117,13 +129,14 @@ class WorkControllerExceptionTest {
     }
 
     @Test
+    @DisplayName("Should return 200 with paged works when retrieving all works without filter")
     void whenFindAll_shouldReturn200AndPagedWorks() throws Exception {
-        io.github.leturnos.panelvault.dto.WorkResponseDTO work = new io.github.leturnos.panelvault.dto.WorkResponseDTO(
-                1L, "Naruto", io.github.leturnos.panelvault.model.WorkType.MANGA, "Panini", "Kishimoto", 72, "http://cover.jpg"
+        WorkResponseDTO work = new WorkResponseDTO(
+                1L, "Naruto", WorkType.MANGA, "Panini", "Kishimoto", 72, "http://cover.jpg"
         );
-        org.springframework.data.domain.Page<io.github.leturnos.panelvault.dto.WorkResponseDTO> pagedWorks = new org.springframework.data.domain.PageImpl<>(java.util.List.of(work));
+        Page<WorkResponseDTO> pagedWorks = new PageImpl<>(List.of(work));
 
-        Mockito.when(service.findAll(Mockito.isNull(), Mockito.any(org.springframework.data.domain.Pageable.class)))
+        Mockito.when(service.findAll(Mockito.isNull(), Mockito.any(Pageable.class)))
                 .thenReturn(pagedWorks);
 
         mockMvc.perform(get("/works"))
@@ -134,13 +147,14 @@ class WorkControllerExceptionTest {
     }
 
     @Test
+    @DisplayName("Should return 200 with filtered paged works when title filter parameter is provided")
     void whenFindAllWithTitleFilter_shouldReturn200AndPagedFilteredWorks() throws Exception {
-        io.github.leturnos.panelvault.dto.WorkResponseDTO work = new io.github.leturnos.panelvault.dto.WorkResponseDTO(
-                1L, "Naruto", io.github.leturnos.panelvault.model.WorkType.MANGA, "Panini", "Kishimoto", 72, "http://cover.jpg"
+        WorkResponseDTO work = new WorkResponseDTO(
+                1L, "Naruto", WorkType.MANGA, "Panini", "Kishimoto", 72, "http://cover.jpg"
         );
-        org.springframework.data.domain.Page<io.github.leturnos.panelvault.dto.WorkResponseDTO> pagedWorks = new org.springframework.data.domain.PageImpl<>(java.util.List.of(work));
+        Page<WorkResponseDTO> pagedWorks = new PageImpl<>(List.of(work));
 
-        Mockito.when(service.findAll(Mockito.eq("Naruto"), Mockito.any(org.springframework.data.domain.Pageable.class)))
+        Mockito.when(service.findAll(Mockito.eq("Naruto"), Mockito.any(Pageable.class)))
                 .thenReturn(pagedWorks);
 
         mockMvc.perform(get("/works").param("title", "Naruto"))
@@ -149,4 +163,3 @@ class WorkControllerExceptionTest {
                 .andExpect(jsonPath("$.content[0].title", is("Naruto")));
     }
 }
-
