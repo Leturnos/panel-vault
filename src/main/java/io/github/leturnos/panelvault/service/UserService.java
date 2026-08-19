@@ -5,6 +5,7 @@ import io.github.leturnos.panelvault.dto.LoginResponseDTO;
 import io.github.leturnos.panelvault.dto.RegisterRequestDTO;
 import io.github.leturnos.panelvault.dto.UserResponseDTO;
 import io.github.leturnos.panelvault.exception.DuplicateResourceException;
+import io.github.leturnos.panelvault.exception.ResourceNotFoundException;
 import io.github.leturnos.panelvault.model.User;
 import io.github.leturnos.panelvault.repository.UserRepository;
 import io.github.leturnos.panelvault.config.TokenService;
@@ -57,7 +58,7 @@ public class UserService {
         org.springframework.security.core.userdetails.User userDetails = (org.springframework.security.core.userdetails.User) authenticationResponse.getPrincipal();
 
         User user = repository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new DuplicateResourceException("Usuário autenticado não pôde ser encontrado no banco de dados."));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário autenticado não pôde ser encontrado no banco de dados."));
 
         String token = tokenService.generateToken(user);
         logger.info("User {} successfully authenticated.", data.username());
