@@ -1,5 +1,6 @@
 package io.github.leturnos.panelvault.controller;
 
+import io.github.leturnos.panelvault.controller.docs.UserWorkControllerDoc;
 import io.github.leturnos.panelvault.dto.UserWorkRequestDTO;
 import io.github.leturnos.panelvault.dto.UserWorkResponseDTO;
 import io.github.leturnos.panelvault.model.User;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/works/{workId}/collection")
-public class UserWorkController {
+public class UserWorkController implements UserWorkControllerDoc {
 
     private final UserWorkService service;
 
@@ -20,6 +21,7 @@ public class UserWorkController {
     }
 
     @PutMapping
+    @Override
     public ResponseEntity<UserWorkResponseDTO> saveOrUpdate(
             @PathVariable Long workId,
             @Valid @RequestBody UserWorkRequestDTO data,
@@ -28,6 +30,7 @@ public class UserWorkController {
     }
 
     @GetMapping
+    @Override
     public ResponseEntity<UserWorkResponseDTO> findByWorkIdAndUser(
             @PathVariable Long workId,
             @AuthenticationPrincipal User user) {
@@ -35,6 +38,7 @@ public class UserWorkController {
     }
 
     @DeleteMapping
+    @Override
     public ResponseEntity<Void> delete(@PathVariable Long workId, @AuthenticationPrincipal User user) {
         service.delete(workId, user);
         return ResponseEntity.noContent().build();

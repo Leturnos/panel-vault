@@ -1,5 +1,6 @@
 package io.github.leturnos.panelvault.controller;
 
+import io.github.leturnos.panelvault.controller.docs.StatsControllerDoc;
 import io.github.leturnos.panelvault.dto.StatsResponseDTO;
 import io.github.leturnos.panelvault.model.User;
 import io.github.leturnos.panelvault.service.StatsService;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/stats")
-public class StatsController {
+public class StatsController implements StatsControllerDoc {
 
     private final StatsService service;
 
@@ -20,12 +21,14 @@ public class StatsController {
     }
 
     @GetMapping
+    @Override
     public ResponseEntity<StatsResponseDTO> stats() {
         StatsResponseDTO response = service.getStats();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me")
+    @Override
     public ResponseEntity<StatsResponseDTO> statsMe(@AuthenticationPrincipal User user) {
         StatsResponseDTO response = service.getUserStats(user);
         return ResponseEntity.ok(response);

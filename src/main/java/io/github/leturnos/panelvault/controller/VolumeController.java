@@ -1,5 +1,6 @@
 package io.github.leturnos.panelvault.controller;
 
+import io.github.leturnos.panelvault.controller.docs.VolumeControllerDoc;
 import io.github.leturnos.panelvault.dto.VolumeRequestDTO;
 import io.github.leturnos.panelvault.dto.VolumeResponseDTO;
 import io.github.leturnos.panelvault.model.User;
@@ -14,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-public class VolumeController {
+public class VolumeController implements VolumeControllerDoc {
 
     private final VolumeService service;
 
@@ -23,6 +24,7 @@ public class VolumeController {
     }
 
     @PostMapping("/works/{id}/volumes")
+    @Override
     public ResponseEntity<VolumeResponseDTO> create(
             @PathVariable Long id,
             @Valid @RequestBody VolumeRequestDTO data,
@@ -38,6 +40,7 @@ public class VolumeController {
     }
 
     @GetMapping("/works/{workId}/volumes")
+    @Override
     public ResponseEntity<List<VolumeResponseDTO>> findAllByWorkId(
             @PathVariable Long workId,
             @AuthenticationPrincipal User user) {
@@ -45,11 +48,13 @@ public class VolumeController {
     }
 
     @GetMapping("/volumes/{id}")
+    @Override
     public ResponseEntity<VolumeResponseDTO> findById(@PathVariable Long id, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(service.findById(id, user));
     }
 
     @DeleteMapping("/volumes/{id}")
+    @Override
     public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal User user) {
         service.delete(id, user);
         return ResponseEntity.noContent().build();

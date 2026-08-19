@@ -16,3 +16,8 @@ api:
   security:
     token:
       secret: ${JWT_SECRET:secret-change-me-in-production}
+
+logging:
+  level:
+    # Suppress non-breaking SpringDoc/Swagger-Core OpenAPI 3.1 warning regarding JsonSchema type deserialization into HashSet
+    org.springdoc.core.utils.SpringDocUtils: ERROR
