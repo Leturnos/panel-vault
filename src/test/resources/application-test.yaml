@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: panelvault-test
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    open-in-view: false
+  jackson:
+    time-zone: America/Sao_Paulo
+
+api:
+  security:
+    token:
+      secret: "test-jwt-secret-key-for-panel-vault-testing-only-12345"
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: WARN
+    org.testcontainers: INFO
+    org.springdoc.core.utils.SpringDocUtils: ERROR
