@@ -1,0 +1,46 @@
+info:
+  name: Get global statistics
+  type: http
+  seq: 1
+  tags:
+    - Statistics
+
+http:
+  method: GET
+  url: "{{baseUrl}}/stats"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 Response
+    description: Global statistics retrieved successfully
+    request:
+      url: "{{baseUrl}}/stats"
+      method: GET
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "totalWorks": 0,
+            "totalVolumes": 0,
+            "completedWorks": 0,
+            "onGoingWorks": 0,
+            "wishlistItems": 0,
+            "totalMangas": 0,
+            "totalComics": 0,
+            "totalGraphicNovels": 0,
+            "totalManhwas": 0
+          }
+
+docs: Retrieves general system statistics such as total works and registered users

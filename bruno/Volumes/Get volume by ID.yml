@@ -1,0 +1,109 @@
+info:
+  name: Get volume by ID
+  type: http
+  seq: 3
+  tags:
+    - Volumes
+
+http:
+  method: GET
+  url: "{{baseUrl}}/volumes/:id"
+  params:
+    - name: id
+      value: ""
+      type: path
+      description: ID of the volume
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 Response
+    description: Volume retrieved successfully
+    request:
+      url: "{{baseUrl}}/volumes/:id"
+      method: GET
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the volume
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "number": 0,
+            "purchaseDate": "",
+            "purchasePrice": 0,
+            "owned": false,
+            "workId": 0
+          }
+  - name: 401 Response
+    description: Unauthorized - invalid or missing JWT token
+    request:
+      url: "{{baseUrl}}/volumes/:id"
+      method: GET
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the volume
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "number": 0,
+            "purchaseDate": "",
+            "purchasePrice": 0,
+            "owned": false,
+            "workId": 0
+          }
+  - name: 404 Response
+    description: Volume not found
+    request:
+      url: "{{baseUrl}}/volumes/:id"
+      method: GET
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the volume
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "number": 0,
+            "purchaseDate": "",
+            "purchasePrice": 0,
+            "owned": false,
+            "workId": 0
+          }
+
+docs: Retrieves details of a specific volume by its ID

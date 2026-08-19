@@ -1,0 +1,195 @@
+info:
+  name: Update a work
+  type: http
+  seq: 2
+  tags:
+    - Works
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/works/:id"
+  params:
+    - name: id
+      value: ""
+      type: path
+      description: ID of the work
+  body:
+    type: json
+    data: |-
+      {
+        "title": "",
+        "type": "MANGA",
+        "publisher": "",
+        "author": "",
+        "totalVolumes": 0,
+        "coverUrl": ""
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 200 Response
+    description: Work updated successfully
+    request:
+      url: "{{baseUrl}}/works/:id"
+      method: PUT
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the work
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+  - name: 400 Response
+    description: Invalid payload or validation error
+    request:
+      url: "{{baseUrl}}/works/:id"
+      method: PUT
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the work
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+  - name: 401 Response
+    description: Unauthorized - invalid or missing JWT token
+    request:
+      url: "{{baseUrl}}/works/:id"
+      method: PUT
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the work
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+  - name: 404 Response
+    description: Work not found
+    request:
+      url: "{{baseUrl}}/works/:id"
+      method: PUT
+      params:
+        - name: id
+          value: ""
+          type: path
+          description: ID of the work
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+    response:
+      status: 404
+      statusText: Not Found
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+
+docs: Updates details of an existing work by its ID

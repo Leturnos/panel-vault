@@ -1,0 +1,136 @@
+info:
+  name: Create a new work
+  type: http
+  seq: 5
+  tags:
+    - Works
+
+http:
+  method: POST
+  url: "{{baseUrl}}/works"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "",
+        "type": "MANGA",
+        "publisher": "",
+        "author": "",
+        "totalVolumes": 0,
+        "coverUrl": ""
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+examples:
+  - name: 201 Response
+    description: Work created successfully
+    request:
+      url: "{{baseUrl}}/works"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+    response:
+      status: 201
+      statusText: Created
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+  - name: 400 Response
+    description: Invalid payload or validation error
+    request:
+      url: "{{baseUrl}}/works"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+    response:
+      status: 400
+      statusText: Bad Request
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+  - name: 401 Response
+    description: Unauthorized - invalid or missing JWT token
+    request:
+      url: "{{baseUrl}}/works"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: Content-Type
+          value: "*/*"
+      body:
+        type: text
+        data: |-
+          {
+            "id": 0,
+            "title": "",
+            "type": "MANGA",
+            "publisher": "",
+            "author": "",
+            "totalVolumes": 0,
+            "coverUrl": ""
+          }
+
+docs: Creates a new work in the catalog
