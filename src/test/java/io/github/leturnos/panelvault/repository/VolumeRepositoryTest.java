@@ -160,4 +160,78 @@ class VolumeRepositoryTest extends AbstractIntegrationTest {
         assertThat(user1Owned).isEqualTo(2L);
         assertThat(user2Owned).isEqualTo(1L);
     }
+
+    @Test
+    @DisplayName("Should aggregate financial metrics for user and work")
+    void financialMetrics_shouldAggregateCorrectly() {
+        Volume v1 = new Volume();
+        v1.setNumber(1);
+        v1.setOwned(true);
+        v1.setPurchaseDate(LocalDate.of(2026, 1, 15));
+        v1.setPurchasePrice(new BigDecimal("30.00"));
+        v1.setUser(user1);
+        v1.setWork(work1);
+        volumeRepository.save(v1);
+
+        Volume v2 = new Volume();
+        v2.setNumber(2);
+        v2.setOwned(true);
+        v2.setPurchaseDate(LocalDate.of(2026, 1, 20));
+        v2.setPurchasePrice(new BigDecimal("50.00"));
+        v2.setUser(user1);
+        v2.setWork(work1);
+        volumeRepository.save(v2);
+
+        Volume v3 = new Volume();
+        v3.setNumber(1);
+        v3.setOwned(true);
+        v3.setPurchaseDate(LocalDate.of(2026, 2, 10));
+        v3.setPurchasePrice(new BigDecimal("40.00"));
+        v3.setUser(user1);
+        v3.setWork(work2);
+        volumeRepository.save(v3);
+
+        // Volume with owned = false should be excluded
+        Volume vUnowned = new Volume();
+        vUnowned.setNumber(3);
+        vUnowned.setOwned(false);
+        vUnowned.setPurchaseDate(LocalDate.of(2026, 1, 25));
+        vUnowned.setPurchasePrice(new BigDecimal("100.00"));
+        vUnowned.setUser(user1);
+        vUnowned.setWork(work1);
+        volumeRepository.save(vUnowned);
+
+        // User 1 totals
+        assertThat(volumeRepository.totalSpentByUser(user1.getId())).isEqualByComparingTo(new BigDecimal("120.00"));
+        assertThat(volumeRepository.totalVolumesWithPrice(user1.getId())).isEqualTo(3);
+        assertThat(volumeRepository.averageVolumePrice(user1.getId())).isEqualByComparingTo(new BigDecimal("40.00"));
+        assertThat(volumeRepository.highestPrice(user1.getId())).isEqualByComparingTo(new BigDecimal("50.00"));
+        assertThat(volumeRepository.lowestPrice(user1.getId())).isEqualByComparingTo(new BigDecimal("30.00"));
+
+        // User 1 + Work 1 metrics
+        assertThat(volumeRepository.totalSpentByUserAndWork(user1.getId(), work1.getId())).isEqualByComparingTo(new BigDecimal("80.00"));
+        assertThat(volumeRepository.averageVolumePriceByWork(user1.getId(), work1.getId())).isEqualByComparingTo(new BigDecimal("40.00"));
+        assertThat(volumeRepository.countByWorkIdAndUserIdAndOwnedTrue(work1.getId(), user1.getId())).isEqualTo(2L);
+
+        // Monthly expenses between dates
+        var expensesBetween = volumeRepository.findMonthlyExpensesBetween(user1.getId(), LocalDate.of(2026, 1, 1), LocalDate.of(2026, 1, 31));
+        assertThat(expensesBetween).hasSize(1);
+        assertThat(expensesBetween.getFirst().getYear()).isEqualTo(2026);
+        assertThat(expensesBetween.getFirst().getMonth()).isEqualTo(1);
+        assertThat(expensesBetween.getFirst().getTotalSpent()).isEqualByComparingTo(new BigDecimal("80.00"));
+        assertThat(expensesBetween.getFirst().getVolumeCount()).isEqualTo(2L);
+
+        // All monthly expenses
+        var allExpenses = volumeRepository.findAllMonthlyExpenses(user1.getId());
+        assertThat(allExpenses).hasSize(2);
+        assertThat(allExpenses.getFirst().getYear()).isEqualTo(2026);
+        assertThat(allExpenses.getFirst().getMonth()).isEqualTo(2);
+        assertThat(allExpenses.getFirst().getTotalSpent()).isEqualByComparingTo(new BigDecimal("40.00"));
+        assertThat(allExpenses.getFirst().getVolumeCount()).isEqualTo(1L);
+
+        assertThat(allExpenses.getLast().getYear()).isEqualTo(2026);
+        assertThat(allExpenses.getLast().getMonth()).isEqualTo(1);
+        assertThat(allExpenses.getLast().getTotalSpent()).isEqualByComparingTo(new BigDecimal("80.00"));
+        assertThat(allExpenses.getLast().getVolumeCount()).isEqualTo(2L);
+    }
 }
