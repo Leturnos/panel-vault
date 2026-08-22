@@ -1,0 +1,246 @@
+meta {
+  name: Update a work
+  type: http
+  seq: 2
+  tags: [
+    Works
+  ]
+}
+
+put {
+  url: {{baseUrl}}/works/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  @description('ID of the work')
+  id: 
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "",
+    "type": "MANGA",
+    "publisher": "",
+    "author": "",
+    "totalVolumes": 0,
+    "coverUrl": ""
+  }
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+docs {
+  Updates details of an existing work by its ID
+}
+
+example {
+  name: 200 Response
+  description: Work updated successfully
+  
+  request: {
+    url: {{baseUrl}}/works/:id
+    method: PUT
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "title": "",
+        "type": "MANGA",
+        "publisher": "",
+        "author": "",
+        "totalVolumes": 0,
+        "coverUrl": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "title": "",
+          "type": "MANGA",
+          "publisher": "",
+          "author": "",
+          "totalVolumes": 0,
+          "coverUrl": ""
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 400 Response
+  description: Invalid payload or validation error
+  
+  request: {
+    url: {{baseUrl}}/works/:id
+    method: PUT
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "title": "",
+        "type": "MANGA",
+        "publisher": "",
+        "author": "",
+        "totalVolumes": 0,
+        "coverUrl": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "title": "",
+          "type": "MANGA",
+          "publisher": "",
+          "author": "",
+          "totalVolumes": 0,
+          "coverUrl": ""
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 401 Response
+  description: Unauthorized - invalid or missing JWT token
+  
+  request: {
+    url: {{baseUrl}}/works/:id
+    method: PUT
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "title": "",
+        "type": "MANGA",
+        "publisher": "",
+        "author": "",
+        "totalVolumes": 0,
+        "coverUrl": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 401
+      text: Unauthorized
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "title": "",
+          "type": "MANGA",
+          "publisher": "",
+          "author": "",
+          "totalVolumes": 0,
+          "coverUrl": ""
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 404 Response
+  description: Work not found
+  
+  request: {
+    url: {{baseUrl}}/works/:id
+    method: PUT
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "title": "",
+        "type": "MANGA",
+        "publisher": "",
+        "author": "",
+        "totalVolumes": 0,
+        "coverUrl": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 404
+      text: Not Found
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "title": "",
+          "type": "MANGA",
+          "publisher": "",
+          "author": "",
+          "totalVolumes": 0,
+          "coverUrl": ""
+        }
+      '''
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "version": "1",
+  "name": "Panel Vault API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "openapi": [
+    {
+      "sourceUrl": "http://localhost:8080/v3/api-docs",
+      "groupBy": "tags",
+      "autoCheck": true,
+      "autoCheckInterval": 5,
+      "lastSyncDate": "2026-08-22T12:52:59.140Z",
+      "specHash": "3656c06a706f080c8911d66773af0270"
+    }
+  ],
+  "collectionVersion": "1"
+}

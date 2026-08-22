@@ -1,0 +1,109 @@
+meta {
+  name: List works with pagination and filter
+  type: http
+  seq: 4
+  tags: [
+    Works
+  ]
+}
+
+get {
+  url: {{baseUrl}}/works
+  body: none
+  auth: bearer
+}
+
+params:query {
+  @description('Zero-based page index (0..N)')
+  page: 0
+  @description('The size of the page to be returned')
+  size: 20
+  @description('Filter works by title (case-insensitive contains)')
+  ~title: 
+  @description('Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.')
+  ~sort: []
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+docs {
+  Retrieves a paginated list of works, optionally filtered by title
+}
+
+example {
+  name: 200 Response
+  description: Works retrieved successfully
+  
+  request: {
+    url: {{baseUrl}}/works
+    method: GET
+    mode: none
+    params:query: {
+      ~title: 
+      page: 0
+      size: 20
+      ~sort: []
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "totalPages": 0,
+          "totalElements": 0,
+          "size": 0,
+          "content": [
+            {
+              "id": 0,
+              "title": "",
+              "type": "MANGA",
+              "publisher": "",
+              "author": "",
+              "totalVolumes": 0,
+              "coverUrl": ""
+            }
+          ],
+          "number": 0,
+          "sort": {
+            "empty": false,
+            "sorted": false,
+            "unsorted": false
+          },
+          "pageable": {
+            "offset": 0,
+            "paged": false,
+            "pageNumber": 0,
+            "pageSize": 0,
+            "sort": {
+              "empty": false,
+              "sorted": false,
+              "unsorted": false
+            },
+            "unpaged": false
+          },
+          "numberOfElements": 0,
+          "first": false,
+          "last": false,
+          "empty": false
+        }
+      '''
+    }
+  }
+}

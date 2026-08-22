@@ -1,0 +1,115 @@
+meta {
+  name: Delete volume by ID
+  type: http
+  seq: 4
+  tags: [
+    Volumes
+  ]
+}
+
+delete {
+  url: {{baseUrl}}/volumes/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  @description('ID of the volume')
+  id: 
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+docs {
+  Deletes a specific volume by its ID
+}
+
+example {
+  name: 204 Response
+  description: Volume deleted successfully
+  
+  request: {
+    url: {{baseUrl}}/volumes/:id
+    method: DELETE
+    mode: none
+    params:path: {
+      id: 
+    }
+  }
+  
+  response: {
+    status: {
+      code: 204
+      text: No Content
+    }
+  
+    body: {
+      type: text
+      content: '''
+  
+      '''
+    }
+  }
+}
+
+example {
+  name: 401 Response
+  description: Unauthorized - invalid or missing JWT token
+  
+  request: {
+    url: {{baseUrl}}/volumes/:id
+    method: DELETE
+    mode: none
+    params:path: {
+      id: 
+    }
+  }
+  
+  response: {
+    status: {
+      code: 401
+      text: Unauthorized
+    }
+  
+    body: {
+      type: text
+      content: '''
+  
+      '''
+    }
+  }
+}
+
+example {
+  name: 404 Response
+  description: Volume not found
+  
+  request: {
+    url: {{baseUrl}}/volumes/:id
+    method: DELETE
+    mode: none
+    params:path: {
+      id: 
+    }
+  }
+  
+  response: {
+    status: {
+      code: 404
+      text: Not Found
+    }
+  
+    body: {
+      type: text
+      content: '''
+  
+      '''
+    }
+  }
+}

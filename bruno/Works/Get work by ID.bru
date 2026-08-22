@@ -1,0 +1,111 @@
+meta {
+  name: Get work by ID
+  type: http
+  seq: 1
+  tags: [
+    Works
+  ]
+}
+
+get {
+  url: {{baseUrl}}/works/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  @description('ID of the work')
+  id: 
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+docs {
+  Retrieves details of a specific work by its ID
+}
+
+example {
+  name: 200 Response
+  description: Work retrieved successfully
+  
+  request: {
+    url: {{baseUrl}}/works/:id
+    method: GET
+    mode: none
+    params:path: {
+      id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "title": "",
+          "type": "MANGA",
+          "publisher": "",
+          "author": "",
+          "totalVolumes": 0,
+          "coverUrl": ""
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 404 Response
+  description: Work not found
+  
+  request: {
+    url: {{baseUrl}}/works/:id
+    method: GET
+    mode: none
+    params:path: {
+      id: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 404
+      text: Not Found
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "title": "",
+          "type": "MANGA",
+          "publisher": "",
+          "author": "",
+          "totalVolumes": 0,
+          "coverUrl": ""
+        }
+      '''
+    }
+  }
+}

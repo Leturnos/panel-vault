@@ -1,0 +1,150 @@
+meta {
+  name: Register a new user
+  type: http
+  seq: 1
+  tags: [
+    Authentication
+  ]
+}
+
+post {
+  url: {{baseUrl}}/auth/register
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "username": "",
+    "email": "",
+    "password": ""
+  }
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+docs {
+  Creates a new user account in the system
+}
+
+example {
+  name: 201 Response
+  description: User registered successfully
+  
+  request: {
+    url: {{baseUrl}}/auth/register
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "username": "",
+        "email": "",
+        "password": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 201
+      text: Created
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "username": "",
+          "email": ""
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 400 Response
+  description: Invalid payload or validation error
+  
+  request: {
+    url: {{baseUrl}}/auth/register
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "username": "",
+        "email": "",
+        "password": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "username": "",
+          "email": ""
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 409 Response
+  description: User with given username or email already exists
+  
+  request: {
+    url: {{baseUrl}}/auth/register
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "username": "",
+        "email": "",
+        "password": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 409
+      text: Conflict
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "username": "",
+          "email": ""
+        }
+      '''
+    }
+  }
+}

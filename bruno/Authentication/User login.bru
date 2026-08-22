@@ -1,0 +1,107 @@
+meta {
+  name: User login
+  type: http
+  seq: 2
+  tags: [
+    Authentication
+  ]
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "username": "",
+    "password": ""
+  }
+}
+
+vars:post-response {
+  token: res.body.token
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+docs {
+  Authenticates user credentials and returns a JWT access token
+}
+
+example {
+  name: 200 Response
+  description: Authentication successful
+  
+  request: {
+    url: {{baseUrl}}/auth/login
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "username": "",
+        "password": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "token": ""
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 400 Response
+  description: Invalid credentials or validation error
+  
+  request: {
+    url: {{baseUrl}}/auth/login
+    method: POST
+    mode: json
+    body:json: {
+      {
+        "username": "",
+        "password": ""
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "token": ""
+        }
+      '''
+    }
+  }
+}

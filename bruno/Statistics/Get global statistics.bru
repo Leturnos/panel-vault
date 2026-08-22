@@ -1,0 +1,61 @@
+meta {
+  name: Get global statistics
+  type: http
+  seq: 1
+  tags: [
+    Statistics
+  ]
+}
+
+get {
+  url: {{baseUrl}}/stats
+  body: none
+  auth: inherit
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+docs {
+  Retrieves general system statistics such as total works and registered users
+}
+
+example {
+  name: 200 Response
+  description: Global statistics retrieved successfully
+  
+  request: {
+    url: {{baseUrl}}/stats
+    method: GET
+    mode: none
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "totalWorks": 0,
+          "totalVolumes": 0,
+          "completedWorks": 0,
+          "onGoingWorks": 0,
+          "wishlistItems": 0,
+          "totalMangas": 0,
+          "totalComics": 0,
+          "totalGraphicNovels": 0,
+          "totalManhwas": 0
+        }
+      '''
+    }
+  }
+}

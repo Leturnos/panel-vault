@@ -1,0 +1,151 @@
+meta {
+  name: Get financial details of a specific work
+  type: http
+  seq: 2
+  tags: [
+    Finances
+  ]
+}
+
+get {
+  url: {{baseUrl}}/finances/works/:workId
+  body: none
+  auth: bearer
+}
+
+params:path {
+  @description('ID of the work')
+  workId: 
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+docs {
+  Returns detailed financial data for a single work in the authenticated user's collection: total spent, average price paid per volume, number of owned volumes, and the estimated cost to acquire the remaining volumes.
+}
+
+example {
+  name: 200 Response
+  description: Work financial details retrieved successfully
+  
+  request: {
+    url: {{baseUrl}}/finances/works/:workId
+    method: GET
+    mode: none
+    params:path: {
+      workId: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 200
+      text: OK
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "workId": 0,
+          "workTitle": "",
+          "totalSpent": 0,
+          "ownedVolumesCount": 0,
+          "totalVolumes": 0,
+          "averagePricePaid": 0,
+          "estimatedRemainingCost": 0
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 401 Response
+  description: Unauthorized - invalid or missing JWT token
+  
+  request: {
+    url: {{baseUrl}}/finances/works/:workId
+    method: GET
+    mode: none
+    params:path: {
+      workId: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 401
+      text: Unauthorized
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "workId": 0,
+          "workTitle": "",
+          "totalSpent": 0,
+          "ownedVolumesCount": 0,
+          "totalVolumes": 0,
+          "averagePricePaid": 0,
+          "estimatedRemainingCost": 0
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 404 Response
+  description: Work not found in the user's collection
+  
+  request: {
+    url: {{baseUrl}}/finances/works/:workId
+    method: GET
+    mode: none
+    params:path: {
+      workId: 
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 404
+      text: Not Found
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "workId": 0,
+          "workTitle": "",
+          "totalSpent": 0,
+          "ownedVolumesCount": 0,
+          "totalVolumes": 0,
+          "averagePricePaid": 0,
+          "estimatedRemainingCost": 0
+        }
+      '''
+    }
+  }
+}

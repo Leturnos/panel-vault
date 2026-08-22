@@ -1,0 +1,232 @@
+meta {
+  name: Add a volume to a work
+  type: http
+  seq: 1
+  tags: [
+    Volumes
+  ]
+}
+
+post {
+  url: {{baseUrl}}/works/:id/volumes
+  body: json
+  auth: bearer
+}
+
+params:path {
+  @description('ID of the work')
+  id: 
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "number": 0,
+    "purchaseDate": "",
+    "purchasePrice": 0,
+    "owned": false
+  }
+}
+
+settings {
+  forwardAuthorizationHeader: false
+}
+
+docs {
+  Creates and associates a new volume with the specified work
+}
+
+example {
+  name: 201 Response
+  description: Volume created successfully
+  
+  request: {
+    url: {{baseUrl}}/works/:id/volumes
+    method: POST
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "number": 0,
+        "purchaseDate": "",
+        "purchasePrice": 0,
+        "owned": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 201
+      text: Created
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "number": 0,
+          "purchaseDate": "",
+          "purchasePrice": 0,
+          "owned": false,
+          "workId": 0
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 400 Response
+  description: Invalid payload or validation error
+  
+  request: {
+    url: {{baseUrl}}/works/:id/volumes
+    method: POST
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "number": 0,
+        "purchaseDate": "",
+        "purchasePrice": 0,
+        "owned": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 400
+      text: Bad Request
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "number": 0,
+          "purchaseDate": "",
+          "purchasePrice": 0,
+          "owned": false,
+          "workId": 0
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 401 Response
+  description: Unauthorized - invalid or missing JWT token
+  
+  request: {
+    url: {{baseUrl}}/works/:id/volumes
+    method: POST
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "number": 0,
+        "purchaseDate": "",
+        "purchasePrice": 0,
+        "owned": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 401
+      text: Unauthorized
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "number": 0,
+          "purchaseDate": "",
+          "purchasePrice": 0,
+          "owned": false,
+          "workId": 0
+        }
+      '''
+    }
+  }
+}
+
+example {
+  name: 404 Response
+  description: Work not found
+  
+  request: {
+    url: {{baseUrl}}/works/:id/volumes
+    method: POST
+    mode: json
+    params:path: {
+      id: 
+    }
+  
+    body:json: {
+      {
+        "number": 0,
+        "purchaseDate": "",
+        "purchasePrice": 0,
+        "owned": false
+      }
+    }
+  }
+  
+  response: {
+    headers: {
+      Content-Type: */*
+    }
+  
+    status: {
+      code: 404
+      text: Not Found
+    }
+  
+    body: {
+      type: text
+      content: '''
+        {
+          "id": 0,
+          "number": 0,
+          "purchaseDate": "",
+          "purchasePrice": 0,
+          "owned": false,
+          "workId": 0
+        }
+      '''
+    }
+  }
+}
